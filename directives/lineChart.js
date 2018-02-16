@@ -15,12 +15,6 @@ return {
 	
 	link : function(scope,element) {
 		var svg = element.find('svg');
-	
-		
-		
-		
-		
-	
 		
 		var chart;
 		
@@ -40,11 +34,12 @@ return {
 	scope.$on('lineChartLoad',update);
 	nv.addGraph(function(){
 		setTimeout(function(){
-		chart = nv.models.discreteBarChart().showValues(false).staggerLabels(true)  
+		chart = nv.models.scatterChart().showDistX(true).showDistY(true).color(d3.scale.category10().range());
+			console.log(scope.score);
 			
-			chart.xAxis.tickValues([0,1,2,3,4,5,6,7]).tickFormat(function(d){return scope.country[d]})
+			chart.xAxis.tickFormat(function(d){return scope.country[d]})
 			
-			chart.yAxis.tickValues([0,1,2,3,4,5,6,7]).tickFormat(function (d) { return scope.score[d]});
+			chart.yAxis.tickFormat(function (d) { return scope.score[d]});
 			
 			scope.$emit('lineChartLoad');
 			return chart;

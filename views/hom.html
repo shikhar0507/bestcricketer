@@ -7,6 +7,8 @@ total centuries <span>{{totalCenturies}}</span>
 <div class="chart-container">
 
 
-<line-chart data="tempHolder" height="250px" country="cdata" score="vsScore"></line-chart>
+<!-- <line-chart data="tempHolder" height="250px" country="cdata" score="vsScore"></line-chart> -->
+<button ng-click="selectCountry('Pakistan')">Pak</button>
+<nvd3 options="options" data="data"></nvd3>
 
 </div>

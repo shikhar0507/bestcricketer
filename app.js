@@ -1,4 +1,4 @@
-var app = angular.module('app',['ui.router']);
+var app = angular.module('app',['ui.router','nvd3']);
 
 app.config(function($stateProvider,$urlRouterProvider) {
     $urlRouterProvider.otherwise('/home');
@@ -8,8 +8,8 @@ app.config(function($stateProvider,$urlRouterProvider) {
         .state('home', {
             url:'/home',
             templateUrl : 'views/hom.html',
-            controller:'home',
-            controllerAs:'main'
+            controller:'home'
+            // controllerAs:'main'
         })
 
         .state('n',{

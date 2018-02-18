@@ -1,4 +1,4 @@
-app.controller('home', function ($scope, $location, $http, helper, service) {
+app.controller('home', function ($scope, $location, $http, helper, service,chartService) {
 
   var vm = this;
 
@@ -12,116 +12,104 @@ app.controller('home', function ($scope, $location, $http, helper, service) {
     vm.parsedData = helper.parse(res, "*");
     mainData = angular.copy(vm.parsedData)
 
-    // vm.getCenturies = helper.score(vm.parsedData, 100).totalCenturies();
-    // $scope.totalCenturies = Object.keys(vm.getCenturies).length;
+    vm.getCenturies = helper.score(vm.parsedData, 100).totalCenturies();
+    $scope.totalCenturies = Object.keys(vm.getCenturies).length;
 
     $scope.totalRuns = helper.score(vm.parsedData, 100).totalRuns();
 
 
-    $scope.selectCountry = function (c) {
-      // vm.temp = helper.score(vm.parsedData,100).totalCenturies(c);
-      // $scope.totalCenturies = Object.keys(vm.temp).length;
-      initGraph(c);
+    
+//bar graph    
+    var initBarGraph = function() {
+      
+      var countryVscore = helper.sortByOpposition(mainData);
+      $scope.datac = chartService.barGraph.data(countryVscore);
+      $scope.optionsc = chartService.barGraph.options();
+      
     }
-
-
-
+    
+    initBarGraph(mainData);
+    
+    
+    // line graph
+    $scope.selectCountry = function (c) {
+      vm.temp = helper.score(vm.parsedData,100).totalCenturies(c);
+      $scope.totalCenturies = Object.keys(vm.temp).length;
+      initGraph(c);
+      initText(c);
+    }
 
     var initGraph = function (val) {
+      
+      $scope.dataForLine = helper.score(vm.parsedData,100).totalCenturies(val);
 
-      // vm.addDat = helper.score(vm.parsedData, 100).totalCenturies(val);
-      var c = [];
-      var score = [];
-      Object.keys(vm.addDat).forEach(function (d) {
-        c.push(d);
-        score.push(vm.addDat[d]);
-      });
+        $scope.data = chartService.lineChart.data($scope.dataForLine);
+        $scope.options = chartService.lineChart.options();
 
-
-      $scope.options = {
-        chart: {
-          type: 'lineChart',
-          height: 450,
-          margin: {
-            top: 20,
-            right: 20,
-            bottom: 60,
-            left: 65
-          },
-          x: function (d) {
-            return d[0];
-          },
-          y: function (d) {
-            return d[1];
-          },
-
-          color: d3.scale.category10().range(),
-          duration: 1000,
-          useInteractiveGuideline: true,
-          clipVoronoi: true,
-
-          xAxis: {
-            axisLabel: 'Date of Centuries Scored',
-            tickFormat: function (d) {
-
-              return d3.time.format('%m/%d/%y')(new Date(d))
-
-            },
-            showMaxMin: true,
-            staggerLabels: true
-          },
-
-          yAxis: {
-            axisLabel: 'Century Score',
-            tickFormat: function (d) {
-              return d3.format('.0f')(d);
-            },
-            staggerLabels: true,
-
-          }
-        }
-      };
-
-      $scope.data = [{
-        key: "Cumulative Return",
-        values: [
-
-        ]
-      }]
-
-
-      function convertDate(inputFormat) {
-
-        var datum = Date.parse(inputFormat);
-        return datum;
-      }
-
-      for (var i = 0; i < c.length; i++) {
-        $scope.data[0].values.push([convertDate(c[i]), score[i]]);
-        $scope.data
-      }
-
-
+      calculateLoss($scope.dataForLine)
     }
 
-    initGraph();
+    var initText =function(c){
+        $scope.country = c;
+      
+
+    }
+    
+    function calculateLoss(resultArr){
+      var winLength = [];
+      var losLength = [];
+      Object.keys(resultArr).forEach(function(result) {
+        if(resultArr[result].result ===  "won") {
+          winLength.push(resultArr[result].result);
+        }
+        else {
+          losLength.push(resultArr[result].result)
+        }
+        $scope.win = winLength.length;
+        $scope.loss = losLength.length;
+      });
+      initDonutForCentury(winLength.length,losLength.length);
+    }
+
+     initGraph();
+
+
+    function initDonutForCentury(win,loss){
+
+          $scope.donutData = chartService.donutChart.data(win,loss);
+  // console.log($scope.donutData);
+            
+          $scope.donutOptions = chartService.donutChart.options();
+    }
+
+    
+
+
+
+
+    isSelfish(mainData,vm.parsedData);
 
   })
 
 
 
 
-  /* Home vs Away    */
+  /* Home vs Away & isSelfish    */
+
+  
   var scoreInHome = [];
   var scoreInAway= [];
-  
-  setTimeout(function () {
-    for (var v = 0; v < vm.parsedData.length; v++) {
-      isHome(v)
-    }
+
+  function isSelfish(mainData,parsed){
+    
+    
+    setTimeout(function () {
+      for (var v = 0; v < parsed.length; v++) {
+        isHome(v,mainData)
+      }
   }, 100)
-  
-  function isHome(v) {
+}
+  function isHome(v,mainData) {
     service.getLocation(mainData[v].ground).then(function (groundCountry) {
       
       if (groundCountry === "India") {
@@ -132,7 +120,8 @@ app.controller('home', function ($scope, $location, $http, helper, service) {
         
       } 
       
-    });
+    });    
+
   }
   
   function scoreInGround(arr,type) {
@@ -141,7 +130,7 @@ app.controller('home', function ($scope, $location, $http, helper, service) {
     for (var i = 0; i < arr.length; i++) {
       miniArrayResult.push(mainData[arr[i]]);
     }
-
+    
     if(type === "total") {
       
       return helper.score(miniArrayResult).totalRuns();
@@ -149,26 +138,36 @@ app.controller('home', function ($scope, $location, $http, helper, service) {
     else {
       return miniArrayResult;
     }
-
-  
-  }
- 
-  
-
-
-
-setTimeout(function(){
     
-console.log(helper.score(scoreInGround(scoreInAway),100).result());
-console.log(helper.score(scoreInGround(scoreInHome),100).result());
+  }
+  
+  
+  
+  function initSelfish(scoreInAway,scoreInHome,league){
+    setTimeout(function(){
+      
+      // $scope.api.refresh();
+    $scope.dataaway = chartService.selfishPie.data(helper.score(scoreInGround(scoreInAway),0).result());
+  
+     $scope.optionsaway = chartService.selfishPie.options();
 
-console.log(scoreInGround(scoreInHome,"total"));
-console.log(scoreInGround(scoreInAway,"total"));
+     $scope.$apply();
+      
+     $scope.datahome = chartService.selfishPie.data(helper.score(scoreInGround(scoreInHome),0).result());
+     $scope.optionshome = chartService.selfishPie.options();
+      
 
-},2000)       
+     $scope.$apply();
+     
+    },2000);
 
-
-
+  }
+  
+  initSelfish(scoreInAway,scoreInHome);
+  
+  
+  
+  
 
 
 

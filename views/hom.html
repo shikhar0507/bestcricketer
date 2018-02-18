@@ -1,14 +1,149 @@
 <div>
-total runs scored <span>{{totalRuns}}</span>
-total centuries <span>{{totalCenturies}}</span>
+    total runs scored
+    <span>{{totalRuns}}</span>
+    total centuries
+    <span>{{totalCenturies}}</span>
 </div>
 
-
+<div class="selfish-stats">
 <div class="chart-container">
+    <div class="line-btn-container">
+        <div class="country-cont">
+            <button ng-click="selectCountry('Pakistan')" class="country-select country-pak"></button>
+            <span>Pakistan</span>
+        </div>
+        <div class="country-cont">
+
+            <button ng-click="selectCountry('Australia')" class="country-select country-aus"></button>
+            <span>Australia</span>
+        </div>
+        <div class="country-cont">
+
+            <button ng-click="selectCountry('England')" class="country-select country-eng"></button>
+            <span>England</span>
+        </div>
+        <div class="country-cont">
+
+            <button ng-click="selectCountry('Sri Lanka')" class="country-select country-sl"></button>
+            <span>Sri Lanka</span>
+        </div>
+        <div class="country-cont">
+
+            <button ng-click="selectCountry('New Zealand')" class="country-select country-nz"></button>
+            <span>New Zealand</span>
+        </div>
+        <div class="country-cont">
+
+            <button ng-click="selectCountry('South Africa')" class="country-select country-sa"></button>
+            <span>South Africa</span>
+        </div>
+        <div class="country-cont">
+            <button ng-click="selectCountry()" class="country-select country-all"></button>
+            <span>All</span>
+        </div>
+    </div>
 
 
-<!-- <line-chart data="tempHolder" height="250px" country="cdata" score="vsScore"></line-chart> -->
-<button ng-click="selectCountry('Pakistan')">Pak</button>
-<nvd3 options="options" data="data"></nvd3>
+    <nvd3 options="options" data="data">
+
+
+        <!-- <line-chart data="tempHolder" height="250px" country="cdata" score="vsScore"></line-chart> -->
 
 </div>
+
+
+
+
+
+<div class="century-table">
+    <div class="table-wrap">
+        <table cellspacing="">
+            <tr>
+                <th>
+                    Date
+                </th>
+                <th>
+                    Result
+                </th>
+                <th>
+                    Score
+                </th>
+            </tr>
+
+            <tr ng-repeat="(key,value) in dataForLine">
+                <td>{{key}}</td>
+                <td>{{value.result}}</td>
+                <td>{{value.score}}</td>
+            </tr>
+
+        </table>
+    </div>
+    <div class="table-result">
+        <div class="won">
+            <p>Total Matches Won
+                <span>{{win}}</span>
+            </p>
+        </div>
+        <div class="lost">
+            <p>Total Matches Lost
+                <span>{{loss}}</span>
+            </p>
+        </div>
+    </div>
+</div>
+
+
+
+<div class="isSelfish">
+        <div class="selfish-cont">
+            <div class="opposition">
+                <h1 ng-if="country">Against {{country}}</h1>
+            </div>
+        </div>
+    <div class="donut-chart-century">
+            <nvd3 options="donutOptions" data="donutData"></nvd3>
+    </div>
+    
+    </div>
+
+
+
+
+
+
+</div>
+
+
+    
+
+
+
+
+
+
+
+<div class="bar-container">
+
+    <nvd3 options="optionsc" data="datac"></nvd3>
+
+
+</div>
+<div class="selfish-container-away">
+
+    <nvd3 options="optionsaway" data="dataaway" api="api"></nvd3>
+
+
+</div>
+<div class="selfish-container-home">
+
+    <nvd3 options="optionshome" data="datahome"></nvd3>
+
+
+</div>
+
+<div>
+    <nvd3 options="optionsbaraway" data="databaraway"></nvd3>
+
+
+</div>
+

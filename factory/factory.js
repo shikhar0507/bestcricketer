@@ -60,7 +60,6 @@ app.factory('helper', function () {
 					var scoreResult ={};
 					// var scoreResult = [];
 					var count =1;
-					console.log(val);
 					
 					if (opp) {
 						// console.log(val);
@@ -87,7 +86,7 @@ app.factory('helper', function () {
 
 							}
 						});
-							console.log(scoreResult)
+							// console.log(scoreResult)
 						return scoreResult;
 					}
 
@@ -181,6 +180,10 @@ var tickV =[];
 			options : barGraphOptions,
 			data : barGraphData
 		},
+		multiBar :{
+			options : multibarOptions,
+			data : multibarData
+		},
 		lineChart : {
 			options: lineGraphOptions,
 			data : lineGraphData
@@ -208,7 +211,8 @@ var tickV =[];
 					
 					duration: 500,
 					xAxis: {
-						axisLabel: 'X Axis'
+						axisLabel: 'X Axis',
+						rotateLabels: -45
 					},
 					yAxis: {
 						axisLabel: 'Y Axis',
@@ -218,21 +222,90 @@ var tickV =[];
 			}
 	}
 	
-	function barGraphData(data) {
-		
-		var list = Object.keys(data);
+	function barGraphData(data,mode) {
+	
+		if(mode === 'asc') {
+			list = Object.keys(data).sort(function (a,b) {return data[a] - data[b]})
+		}
+		else if (mode === 'dsc') {
+			list = Object.keys(data).sort(function (a,b) {return data[b] - data[a]})
+			
+		}
+		else {
+			 list =Object.keys(data);;
+		}
 
 		var adder = [{
 			"key" : "country Vs Score",
 			values :[]
 		}]	
 
+
+		
 		for(var i=0;i<list.length;i++) {
 			adder[0].values.push({"label":list[i],"value":data[list[i]]})
 		}
 		
 		return adder;		
 			
+	}
+
+	function multibarOptions(){
+		return {
+			chart: {
+                type: 'multiBarChart',
+                height: 450,
+                clipEdge: true,
+                duration: 500,
+				stacked: true,
+				showControls:false,
+				tooltip : {
+					contentGenerator: function(d) { return '<p><span class="mode-select" style="background-color:'+d.color+'"></span> '+ d.data.key +' <span><b>'+ d.data.y +'</b></span>  </p>'; }
+				},
+				
+                xAxis: {
+                    axisLabel: '',
+                    showMaxMin: true,
+                    tickFormat: function(d){
+                        return d3.format('')(d);
+                    }
+                },
+                yAxis: {
+                    axisLabel: 'Total Score',
+                    // axisLabelDistance: -20,
+                    // tickFormat: function(d){
+                    //     return d3.format(',.1f')(d);
+                    // }
+                }
+            }
+		}
+	}
+
+	function multibarData(data,mode){
+		if(mode === 'asc') {
+			list = Object.keys(data).sort(function (a,b) {return data[a] - data[b]})
+		}
+		else if (mode === 'dsc') {
+			list = Object.keys(data).sort(function (a,b) {return data[b] - data[a]})
+			
+		}
+		else {
+			 list =Object.keys(data);;
+		}
+		
+		var adder = [];
+
+		for (let index = 0; index < list.length; index++) {
+			
+			adder.push({"key":list[index],values:[{x:"",y:data[list[index]]}] })
+		}
+		
+		return adder;
+
+
+
+
+
 	}
 
 	function lineGraphOptions(){
@@ -251,8 +324,9 @@ var tickV =[];
 				  useInteractiveGuideline: true,
 				  clipVoronoi: true,
 				  clipEdge: true,
-		
 				  xAxis: {
+					showMaxMin:true,
+					
 					  axisLabel: 'Date of Centuries Scored',
 					  tickFormat: function (d) {
 						  
@@ -278,7 +352,7 @@ var tickV =[];
 		
 		function lineGraphData(data) {
 			
-			console.log(data);
+			// console.log(data);
 			
 			var c = [];
 			
@@ -288,9 +362,9 @@ var tickV =[];
 				score.push(data[d].score);
 			});
 
-			console.log(c);
+			// console.log(c);
 			
-					console.log(score);
+			// 		console.log(score);
 				
 			
 			var adder = [{
@@ -375,7 +449,7 @@ var tickV =[];
                 duration: 500,
                 legend: {
                     margin: {
-                        top: 0,
+                        top: 10,
                         right: 0,
                         bottom: 0,
                         left: 0

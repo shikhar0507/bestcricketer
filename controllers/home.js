@@ -15,23 +15,28 @@ app.controller('home', function ($scope, $location, $http, helper, service, char
     vm.parsedData = helper.parse(res, "*");
     mainData = angular.copy(vm.parsedData)
 
-    // vm.getCenturies = helper.score(vm.parsedData, 100).totalCenturies();
-    // $scope.totalCenturies = Object.keys(vm.getCenturies).length;
-
+  
     $scope.totalRuns = helper.score(vm.parsedData, 100).totalRuns();
 
-
+    vm.sort = function(){
+      
+    }
+    
 
     //bar graph    
-    var initBarGraph = function () {
-
+    vm.initBarGraph = function (mode) {
+      
+      document.querySelector('.discrete-bar').style.display = "block";
       var countryVscore = helper.sortByOpposition(mainData);
-      $scope.datac = chartService.barGraph.data(countryVscore);
-      $scope.optionsc = chartService.barGraph.options();
+      $scope.battingScoreTotal = chartService.barGraph.data(countryVscore,mode);
+      $scope.battingScoreTotalOptions = chartService.barGraph.options();
 
+      $scope.stackedBarData = chartService.multiBar.data(countryVscore,mode);
+      $scope.stackedBarOptions = chartService.multiBar.options();
     }
 
-    initBarGraph(mainData);
+
+    // vm.initBarGraph(mainData);
 
 
     // line graph
@@ -65,13 +70,17 @@ app.controller('home', function ($scope, $location, $http, helper, service, char
         } else {
           losLength.push(resultArr.Match[date].result)
         }
-
+        
+        
+        c ? $scope.againstTeam = "against "+ c : $scope.againstTeam = '(Overall)';
         
         $scope.win = winLength.length;
         $scope.loss = losLength.length;
-        // console.log(helper.score(vm.parsedData,100).totalCenturies(c));
         
-      $scope.totalCenturies = helper.score(mainData,100).totalCenturies(c).total;        
+        $scope.totalCenturiesAgasintOpp = helper.score(mainData,100).totalCenturies(c).total;    
+        $scope.totalCenturies = helper.score(mainData,100).totalCenturies(c).total;    
+      
+
       });
       initDonutForCentury(winLength.length, losLength.length);
     }
@@ -82,7 +91,7 @@ app.controller('home', function ($scope, $location, $http, helper, service, char
     function initDonutForCentury(win, loss) {
 
       $scope.donutData = chartService.donutChart.data(win, loss);
-      // console.log($scope.donutData);
+  
 
       $scope.donutOptions = chartService.donutChart.options();
     }

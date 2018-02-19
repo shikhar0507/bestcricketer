@@ -17,26 +17,130 @@ app.controller('home', function ($scope, $location, $http, helper, service, char
 
   
     $scope.totalRuns = helper.score(vm.parsedData, 100).totalRuns();
+    
+    var countryVscore = helper.sortByOpposition(mainData);
 
-    vm.sort = function(){
+    vm.calculateAverage =function(){
+      var average = {};
+      const totalMatches = mainData.length;
+      const runs = helper.score(mainData).totalRuns();
+      $scope.carrerAverage = Math.round(runs / totalMatches);
+
       
     }
+    vm.calculateAverage();
     
-
-    //bar graph    
-    vm.initBarGraph = function (mode) {
+    
+    vm.averageAgainstCountry = function(weightedAv){
+   
       
+
+      var matches = helper.matchesPlayedAgainst(mainData,countryVscore);
+      var teams = Object.keys(matches);
+      var av = {};
+      var set = {};
+      
+      for (let index = 0; index < teams.length; index++) {
+
+      
+       
+          if(weightedAv) {
+            av = Math.round(countryVscore[teams[index]] / matches[teams[index]] * weightedAv[teams[index]]);
+          }
+          else {
+           
+            av = Math.round(countryVscore[teams[index]] / matches[teams[index]]);
+          }
+          
+          set[teams[index]] = {"average":av,"totalRuns":countryVscore[teams[index]],"totalMatches":matches[teams[index]]}
+         
+
+
+
+
+
+        }
+        // var DscSort = Object.keys(set).sort(function(a,b){
+        //   return set[b].average - set[a].average; 
+        // })
+
+        // for (let index = 0; index < DscSort.length; index++) {
+        //   set[DscSort[index]] = {"average":Math.round(countryVscore[DscSort[index]] / matches[DscSort[index]] * weightedAv[DscSort[index]]),"totalRuns":countryVscore[DscSort[index]],"totalMatches":matches[DscSort[index]]}
+
+        // }
+        // console.log(set)
+        // $scope.set = set;
+                
+        sortWeighted(set)
+      }
+      
+      vm.averageAgainstCountry();
+
+    vm.weightedAverage = function(){
+      const weights = {                          
+        'Australia' : 1,
+        'England' :0.7,
+        'Sri Lanka' :0.75,
+        'South Africa':0.7,
+        'Pakistan': 0.75,
+        'New Zealand' : 0.7,
+        'West Indies' :0.6,
+        'Bangladesh':0.4,
+        'Kenya':0.1,
+        'Netherlands':0.1,
+        'Namibia':0.1,
+        'Bermuda':0.1,
+        'Ireland':0.1,
+        'U.A.E.':0.1,
+        'Zimbabwe':0.4,
+      }
+
+      vm.averageAgainstCountry(weights);
+
+
+    }
+
+    vm.weightedAverage();
+
+     function sortWeighted(dataSet){
+      var sortedSet = {};    
+      var DscSort = Object.keys(dataSet).sort(function(a,b){
+          return dataSet[b].average - dataSet[a].average; 
+        })
+        for (let index = 0; index < DscSort.length; index++) {
+         
+          sortedSet[DscSort[index]] = {"average":dataSet[DscSort[index]].average,"totalRuns":dataSet[DscSort[index]].totalRuns,"totalMatches":dataSet[DscSort[index]].totalMatches}
+
+
+        }
+        console.log(sortedSet)
+        $scope.set = sortedSet;  
+
+    }
+
+
+   
+    //bar graph    
+     vm.initBarGraph = function (mode) {
+
       document.querySelector('.discrete-bar').style.display = "block";
-      var countryVscore = helper.sortByOpposition(mainData);
+      document.querySelector('.average-analysis').style.display = "block";
+
       $scope.battingScoreTotal = chartService.barGraph.data(countryVscore,mode);
       $scope.battingScoreTotalOptions = chartService.barGraph.options();
 
+    }
+
+    // vm.initBarGraph();
+
+    vm.initStackedMultiBar = function(mode){
+      document.querySelector('.totalRuns').style.display = "block";
+      // totalRuns
       $scope.stackedBarData = chartService.multiBar.data(countryVscore,mode);
       $scope.stackedBarOptions = chartService.multiBar.options();
     }
+    vm.initStackedMultiBar();
 
-
-    // vm.initBarGraph(mainData);
 
 
     // line graph
@@ -196,6 +300,7 @@ app.controller('home', function ($scope, $location, $http, helper, service, char
       $scope.datahome = chartService.selfishPie.data(helper.score(scoreInGround(scoreInHome), 0).result());
       $scope.optionshome = chartService.selfishPie.options();
 
+      console.log(helper.score(scoreInGround(scoreInHome), 0).result());
 
       $scope.$apply();
 
@@ -206,30 +311,30 @@ app.controller('home', function ($scope, $location, $http, helper, service, char
   initSelfish(scoreInAway, scoreInHome);
 
 
-  function performanceInUserState(v) {
-    var dataArr = [];
-    $http.get("http://extreme-ip-lookup.com/json/").then(function success(res) {
+  // function performanceInUserState(v) {
+  //   var dataArr = [];
+  //   $http.get("http://extreme-ip-lookup.com/json/").then(function success(res) {
 
-      for (let index = 0; index < scoreInGround(scoreInHome).length; index++) {
-        if (res.data.city === scoreInGround(scoreInHome)[index].ground) {
-          dataArr.push(scoreInGround(scoreInHome)[index]);
+  //     for (let index = 0; index < scoreInGround(scoreInHome).length; index++) {
+  //       if (res.data.city === scoreInGround(scoreInHome)[index].ground) {
+  //         dataArr.push(scoreInGround(scoreInHome)[index]);
 
-        }
+  //       }
 
-      }
+  //     }
 
-      $scope.userStateRuns = helper.score(dataArr, 0).totalRuns();
+  //     $scope.userStateRuns = helper.score(dataArr, 0).totalRuns();
 
-      $scope.userStateAverage = $scope.userStateRuns / dataArr.length;
-      $scope.userStateWickets = helper.wickets(dataArr);
+  //     $scope.userStateAverage = $scope.userStateRuns / dataArr.length;
+  //     $scope.userStateWickets = helper.wickets(dataArr);
 
-    });
-  }
+  //   });
+  // }
 
-  setTimeout(function () {
+  // setTimeout(function () {
 
-    performanceInUserState();
-  }, 1000);
+  //   performanceInUserState();
+  // }, 1000);
 
 
 

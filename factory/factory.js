@@ -2,6 +2,7 @@ app.factory('helper', function () {
 
 	var obj = {};
 	var dataArray = [];
+
 	return {
 
 
@@ -48,6 +49,7 @@ app.factory('helper', function () {
 			var totalRuns = [];
 			var hasWon = [];
 			var hasLost = [];
+			
 			totalRuns.push(val.map(function (q) {
 				return q.batting_score
 			}));
@@ -139,27 +141,65 @@ app.factory('helper', function () {
 		},
 
 		sortByOpposition: function (val, country) {
-
 			var holder = {};
+			
 			val.forEach(function (d) {
 
+				
 				if (holder.hasOwnProperty(d.opposition)) {
-					holder[d.opposition] = holder[d.opposition] + d.batting_score;
+					holder[d.opposition] = holder[d.opposition] + d.batting_score ;
+
 				} else {
+
 					holder[d.opposition] = d.batting_score;
 				}
+				
+				
 			})
 
+	
+			
 			if (country) {
 				newObj = {};
 				newObj[country] = holder[country];
+				
 				return newObj;
 			} else {
+				
+	
 				return holder;
 			}
+
 		},
 
-	}
+		matchesPlayedAgainst : function(totalData,sortedOpposition){
+
+			var teamList = Object.keys(sortedOpposition);
+			var matches = {};
+			var matchCount =0;
+			for (let index = 0; index < teamList.length; index++) {
+				var matchCount =1;
+				
+				for (let j = 0; j < totalData.length; j++) {
+						if(totalData[j].opposition === teamList[index]) {
+							matches[teamList[index]] = matchCount++;
+						}
+				}
+								
+			}
+
+			return matches;
+
+			
+			
+			
+
+		}
+
+		
+		}
+
+	
 
 })
 
@@ -205,18 +245,20 @@ var tickV =[];
 					x: function(d){return d.label;},
 					y: function(d){return d.value;},
 					showValues: true,
+					height:250,
 					valueFormat: function(d){
 						return d3.format(',')(d);
 					},
 					
 					duration: 500,
 					xAxis: {
-						axisLabel: 'X Axis',
-						rotateLabels: -45
+						axisLabel: 'Oppostion',
+						rotateLabels: -50,
+						axisLabelDistance: 10
 					},
 					yAxis: {
-						axisLabel: 'Y Axis',
-						axisLabelDistance: -10,
+						axisLabel: 'Score ',
+						axisLabelDistance: 10,
 					}
 				}
 			}
@@ -234,6 +276,8 @@ var tickV =[];
 		else {
 			 list =Object.keys(data);;
 		}
+
+		
 
 		var adder = [{
 			"key" : "country Vs Score",
@@ -254,7 +298,7 @@ var tickV =[];
 		return {
 			chart: {
                 type: 'multiBarChart',
-                height: 450,
+                height: 375,
                 clipEdge: true,
                 duration: 500,
 				stacked: true,

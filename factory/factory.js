@@ -27,6 +27,14 @@ app.factory('helper', function () {
 					dataArray.push(val[i]);
 				}
 
+				if(val[i].wickets === "-") {
+					val[i].wickets = 0;
+
+				}
+				else {
+					val[i].wickets = parseInt(val[i].wickets);
+				}
+
 
 
 			}
@@ -49,26 +57,38 @@ app.factory('helper', function () {
 
 					var centuryAgaistOpp = [];
 					var sc = {};
+					var scoreResult ={};
+					// var scoreResult = [];
+					var count =1;
+					console.log(val);
+					
 					if (opp) {
 						// console.log(val);
 						
 						val.map(function (s) {
 
 							if (s.batting_score >= 100 && s.opposition === opp) {
-								sc[s.date] = { "score" : s.batting_score,"result": s.match_result}
+								sc[s.date] ={ "score" : s.batting_score,"result": s.match_result};
+								scoreResult["Match"] = sc;
+								scoreResult["total"] = count++
+
 							}
 						});
 
-						return sc;
+						return scoreResult;
 					} else {
-						val.map(function (s) {
-							
+						
+							val.map(function(s){
+
 							if (s.batting_score >= 100) {
-								sc[s.date] = { "score" : s.batting_score,"result": s.match_result}
+								sc[s.date] ={ "score" : s.batting_score,"result": s.match_result};
+								scoreResult["Match"] = sc;
+								scoreResult["total"] = count++
+
 							}
 						});
-
-						return sc;
+							console.log(scoreResult)
+						return scoreResult;
 					}
 
 				},
@@ -106,6 +126,17 @@ app.factory('helper', function () {
 				}
 			};
 			return scoreData;
+		},
+
+		wickets : function(data){
+			var wicket = {};
+			var wicketTotal = [];
+			for (let index = 0; index < data.length; index++) {
+				wicketTotal.push(data[index].wickets)
+			}
+			wicket["totalWickets"] =wicketTotal.length;
+			
+			return wicket;
 		},
 
 		sortByOpposition: function (val, country) {
@@ -247,7 +278,7 @@ var tickV =[];
 		
 		function lineGraphData(data) {
 			
-			// console.log(data);
+			console.log(data);
 			
 			var c = [];
 			
@@ -257,8 +288,10 @@ var tickV =[];
 				score.push(data[d].score);
 			});
 
-
+			console.log(c);
 			
+					console.log(score);
+				
 			
 			var adder = [{
 				key: "Century vs Date",
@@ -342,7 +375,7 @@ var tickV =[];
                 duration: 500,
                 legend: {
                     margin: {
-                        top: -30,
+                        top: 0,
                         right: 0,
                         bottom: 0,
                         left: 0

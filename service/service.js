@@ -1,6 +1,11 @@
+
+
 app.service('service',function($http){
 const url = "http://localhost:8000/n";
 const gmaps = "AIzaSyBJTGYSpyjSwPoa_raHDwjiREvjHU0yfjg";
+
+var groundDetails = {};
+
 this.getData = function(){
 	
 
@@ -14,20 +19,58 @@ this.getData = function(){
 
 }
 
-var stripCountry = function(address){
+var stripGroundDetails = function(address){
 	var newaddress = address.split(",");
-	var formatterAddress = newaddress[newaddress.length -1].replace(" ","");
-	return formatterAddress;
+	var formattedCountry = newaddress[newaddress.length -1].replace(" ","");
+	groundDetails["city"] = newaddress[0];
+	groundDetails["country"] = formattedCountry;	
+	return groundDetails;
 }
 
 this.getLocation = function(ground) {
 	
 return $http.get("https://maps.googleapis.com/maps/api/geocode/json?address="+ground+"&key="+gmaps).then(function(response) {
+	
+		
+		return stripGroundDetails(response.data.results[0].formatted_address);
+})
+
+
+}
+
+
+
+this.groundNearMe = function(res){
+// console.log(res);
+
+
+return $http.get("https://maps.googleapis.com/maps/api/geocode/json?latlng="+res.data.lat+","+res.data.lon+"&key"+gmaps).then(function(lookup){
+		
+			var address = lookup.data.results[0].address_components;
+			var myarea;	
+			var place =	 address.map(function(findType) {
+				if(findType.types.includes("locality")) {
+					myarea = findType.short_name;
+				}
+
+			});
+			// console.log(myarea);
+			
+			return myarea;
+
+				
+	},function error(err){
+		console.log(err);
+		
+	})
+
+
 
 	
-return stripCountry(response.data.results[0].formatted_address);
-})
 }
+
+
+
 
 
 

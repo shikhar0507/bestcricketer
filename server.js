@@ -5,10 +5,10 @@ const app = express();
 
 
 
-// const port =8000;
-// app.listen(port,() => {
-    
-// });
+var port  = process.env.PORT || 8080;
+app.listen(port, function() {
+});
+
 
 var jsonData = [];
 

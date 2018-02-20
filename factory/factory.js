@@ -174,6 +174,8 @@ app.factory('helper', function () {
 
 		matchesPlayedAgainst : function(totalData,sortedOpposition){
 
+					
+
 			var teamList = Object.keys(sortedOpposition);
 			var matches = {};
 			var matchCount =0;
@@ -190,16 +192,49 @@ app.factory('helper', function () {
 
 			return matches;
 
-			
-			
-			
-
-		}
+		},
 
 		
-		}
+		
+		
+		sortWeighted : function(dataSet,homeMatches,totalScore){
+			// console.log(dataSet)
+			console.log(homeMatches)
+			const weights = {                          
+			  'Australia' : 1,
+			  'England' :0.7,
+			  'Sri Lanka' :0.75,
+			  'South Africa':0.7,
+			  'Pakistan': 0.75,
+			  'New Zealand' : 0.7,
+			  'West Indies' :0.6,
+			  'Bangladesh':0.4,
+			  'Kenya':0.1,
+			  'Netherlands':0.1,
+			  'Namibia':0.1,
+			  'Bermuda':0.1,
+			  'Ireland':0.1,
+			  'U.A.E.':0.1,
+			  'Zimbabwe':0.4,
+			}
+			var matches = homeMatches;
+			console.log(matches);
+			var teams = Object.keys(matches);
+			// var av = {};
+			var weightedSet = {};
+			
+			for (let index = 0; index < teams.length; index++) {
+		  
+	  
+				  av = Math.round(totalScore[teams[index]] / matches[teams[index]] * weights[teams[index]]);
+					
+				  weightedSet[teams[index]] = {"average":av,"totalRuns":totalScore[teams[index]],"totalMatches":matches[teams[index]]}
+			   
+			  }
+			  return weightedSet;
+		  }
 
-	
+		}
 
 })
 
@@ -442,21 +477,14 @@ var tickV =[];
 			return {
 				chart: {
 					type: 'pieChart',
-					height: 500,
+					height: 400,
 					x: function(d){return d.key;},
 					y: function(d){return d.y;},
 					showLabels: true,
 					duration: 500,
 					labelThreshold: 0.01,
 					labelSunbeamLayout: true,
-					legend: {
-						margin: {
-							top: 5,
-							right: 35,
-							bottom: 5,
-							left: 0
-						}
-					}
+				
 			}
 		}
 	}

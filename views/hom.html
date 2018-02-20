@@ -124,7 +124,7 @@
                                   
                                     </tr>
         
-                                    <tr ng-repeat="(key,value) in set">
+                                    <tr ng-repeat="(key,value) in weightedResult">
                                         <td style="text-align:center">{{key}}</td>
                                         <td  style="text-align:center">{{value.average}}</td>
                                   
@@ -177,7 +177,7 @@
             </div>
             
         </div>
-
+</div>
 
         <div class="col-md-12 col-xs-12 pt-20">
 
@@ -277,9 +277,7 @@
         </div>
 
 
-
-
-
+        
 
 
 
@@ -328,23 +326,38 @@
 
     </div>
 
+    <div class="home-away-stats col-md-12 col-xs-12">
+
+        <div class="content">
+            <div class="heading-cont">
+                <h2 class="heading">
+                    Sachin's  Performance in Home Vs Away
+                </h2>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="selfish-container-home">
+        
+                <nvd3 options="optionshome" data="datahome"></nvd3>
+                
+                
+            </div>
+        </div>
 
 
+        <div class="col-md-6">
+              
     <div class="selfish-container-away">
 
         <nvd3 options="optionsaway" data="dataaway" api="api"></nvd3>
     
     
     </div>
-    <div class="selfish-container-home">
-        
-        <nvd3 options="optionshome" data="datahome"></nvd3>
-        
-        
+        </div>
+
     </div>
-    
-    <div>
-        <nvd3 options="optionsbaraway" data="databaraway"></nvd3>
-        
-        
-    </div>
+
+
+
+

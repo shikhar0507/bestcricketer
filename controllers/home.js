@@ -3,120 +3,59 @@ app.controller('home', function ($scope, $location, $http, helper, service, char
   var vm = this;
 
 
-
-
-
-
-
-
   var mainData;
-  service.getData().then(function (res) {
 
+  service.getData().then(function (res) {
+    
     vm.parsedData = helper.parse(res, "*");
     mainData = angular.copy(vm.parsedData)
-
+    var countryVscore = helper.sortByOpposition(mainData);
   
     $scope.totalRuns = helper.score(vm.parsedData, 100).totalRuns();
     
-    var countryVscore = helper.sortByOpposition(mainData);
 
     vm.calculateAverage =function(){
       var average = {};
       const totalMatches = mainData.length;
       const runs = helper.score(mainData).totalRuns();
-      $scope.carrerAverage = Math.round(runs / totalMatches);
-
-      
+      $scope.carrerAverage = Math.round(runs / totalMatches);  
     }
+
     vm.calculateAverage();
     
-    
-    vm.averageAgainstCountry = function(weightedAv){
-   
-      
+    vm.averageAgainstCountry = function(match,opp){
 
-      var matches = helper.matchesPlayedAgainst(mainData,countryVscore);
-      var teams = Object.keys(matches);
-      var av = {};
+      
+      var teams = Object.keys(match);
+ 
       var set = {};
       
       for (let index = 0; index < teams.length; index++) {
-
-      
-       
-          if(weightedAv) {
-            av = Math.round(countryVscore[teams[index]] / matches[teams[index]] * weightedAv[teams[index]]);
-          }
-          else {
+    
+        
            
-            av = Math.round(countryVscore[teams[index]] / matches[teams[index]]);
-          }
+            av = Math.round(opp[teams[index]] / match[teams[index]]);
           
-          set[teams[index]] = {"average":av,"totalRuns":countryVscore[teams[index]],"totalMatches":matches[teams[index]]}
+          
+           set[teams[index]] = {"average":av,"totalRuns":opp[teams[index]],"totalMatches":match[teams[index]]}
          
-
-
-
-
-
         }
-        // var DscSort = Object.keys(set).sort(function(a,b){
-        //   return set[b].average - set[a].average; 
-        // })
-
-        // for (let index = 0; index < DscSort.length; index++) {
-        //   set[DscSort[index]] = {"average":Math.round(countryVscore[DscSort[index]] / matches[DscSort[index]] * weightedAv[DscSort[index]]),"totalRuns":countryVscore[DscSort[index]],"totalMatches":matches[DscSort[index]]}
-
-        // }
-        // console.log(set)
-        // $scope.set = set;
-                
-        sortWeighted(set)
-      }
-      
-      vm.averageAgainstCountry();
-
-    vm.weightedAverage = function(){
-      const weights = {                          
-        'Australia' : 1,
-        'England' :0.7,
-        'Sri Lanka' :0.75,
-        'South Africa':0.7,
-        'Pakistan': 0.75,
-        'New Zealand' : 0.7,
-        'West Indies' :0.6,
-        'Bangladesh':0.4,
-        'Kenya':0.1,
-        'Netherlands':0.1,
-        'Namibia':0.1,
-        'Bermuda':0.1,
-        'Ireland':0.1,
-        'U.A.E.':0.1,
-        'Zimbabwe':0.4,
+        return set;
+     
       }
 
-      vm.averageAgainstCountry(weights);
+      function initWeightedSystem(){
+        var totalScore = helper.sortByOpposition(mainData);
+        console.log(totalScore)
+        var countMatches = helper.matchesPlayedAgainst(mainData,totalScore);
+        console.log(countMatches);
+        
+        $scope.weightedResult = helper.sortWeighted(mainData,countMatches,totalScore);
+        console.log($scope.weightedResult)
+      }
+      initWeightedSystem();
+      // vm.averageAgainstCountry();
 
-
-    }
-
-    vm.weightedAverage();
-
-     function sortWeighted(dataSet){
-      var sortedSet = {};    
-      var DscSort = Object.keys(dataSet).sort(function(a,b){
-          return dataSet[b].average - dataSet[a].average; 
-        })
-        for (let index = 0; index < DscSort.length; index++) {
-         
-          sortedSet[DscSort[index]] = {"average":dataSet[DscSort[index]].average,"totalRuns":dataSet[DscSort[index]].totalRuns,"totalMatches":dataSet[DscSort[index]].totalMatches}
-
-
-        }
-        console.log(sortedSet)
-        $scope.set = sortedSet;  
-
-    }
 
 
    
@@ -201,36 +140,11 @@ app.controller('home', function ($scope, $location, $http, helper, service, char
     }
 
 
-
-
-
-
     isSelfish(mainData, vm.parsedData);
 
   })
 
 
-  // function sachinPerformanceInUserGround(mainData) {
-  //   $http.get("http://extreme-ip-lookup.com/json/").then(function success(res){
-  //     var userGround = [];
-  //        console.log(helper.score(scoreInGround(scoreInHome)).result());       
-  //   })
-  // }
-
-  // setTimeout(function(){
-  //   sachinPerformanceInUserGround(mainData);
-  // },1500)
-
-
-  // $http.get("http://extreme-ip-lookup.com/json/").then(function success(res){
-
-  //   if(res.data.city === mainData[v].ground) {
-  //    userGround.push(mainData[v]);
-
-  //   }
-
-
-  // })
 
 
 
@@ -299,17 +213,32 @@ app.controller('home', function ($scope, $location, $http, helper, service, char
 
       $scope.datahome = chartService.selfishPie.data(helper.score(scoreInGround(scoreInHome), 0).result());
       $scope.optionshome = chartService.selfishPie.options();
-
-      console.log(helper.score(scoreInGround(scoreInHome), 0).result());
-
+      
       $scope.$apply();
 
+      
+      homePerformance();
     }, 2000);
-
   }
-
+  
   initSelfish(scoreInAway, scoreInHome);
+  
+  
+  function homePerformance (){
+    var homeSats = scoreInGround(scoreInHome);
+    var homeOpp = helper.sortByOpposition(scoreInGround(scoreInHome))
+    var homeMatches = helper.matchesPlayedAgainst(homeSats,homeOpp);
 
+    var awaySats = scoreInGround(scoreInAway);
+    var awayOpp = helper.sortByOpposition(scoreInGround(scoreInAway))
+    var awayMatches = helper.matchesPlayedAgainst(awaySats,awayOpp);
+    console.log(vm.averageAgainstCountry(homeMatches,homeOpp));
+    
+    console.log(vm.averageAgainstCountry(homeMatches,awayOpp));
+    
+  }
+  
+  
 
   // function performanceInUserState(v) {
   //   var dataArr = [];

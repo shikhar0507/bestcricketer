@@ -19,7 +19,7 @@ app.controller('home', function ($scope, $location, $http, helper, service, char
 
 
     vm.calculateAverage = function (data) {
-      // console.log(data)
+
       const totalMatches = data.length;
       const runs = helper.score(data).totalRuns();
       return Math.round(runs / totalMatches);
@@ -31,7 +31,6 @@ app.controller('home', function ($scope, $location, $http, helper, service, char
 
 
       var teams = Object.keys(match);
-
       var set = {};
 
       for (let index = 0; index < teams.length; index++) {
@@ -54,15 +53,15 @@ app.controller('home', function ($scope, $location, $http, helper, service, char
 
     function initWeightedSystem() {
       var totalScore = helper.sortByOpposition(mainData);
-      // console.log(totalScore)
+     
       var countMatches = helper.matchesPlayedAgainst(mainData, totalScore);
-      // console.log(countMatches);
+     
 
       $scope.weightedResult = helper.sortWeighted(mainData, countMatches, totalScore);
-      // console.log($scope.weightedResult)
+      
     }
     initWeightedSystem();
-    // vm.averageAgainstCountry();
+  
 
 
 
@@ -110,7 +109,7 @@ app.controller('home', function ($scope, $location, $http, helper, service, char
 
 
     function calculateLoss(resultArr, c) {
-      // console.log(resultArr);
+ 
 
       var winLength = [];
       var losLength = [];
@@ -178,7 +177,6 @@ app.controller('home', function ($scope, $location, $http, helper, service, char
 
   function isHome(v, mainData) {
 
-
     service.getLocation(mainData[v].ground).then(function (groundCountry) {
       if (groundCountry.country === "India") {
         scoreInHome.push(v);
@@ -213,54 +211,110 @@ app.controller('home', function ($scope, $location, $http, helper, service, char
     setTimeout(function () {
 
       // $scope.api.refresh();
-      $scope.dataaway = chartService.selfishPie.data(helper.score(scoreInGround(scoreInAway), 0).result());
+      var winLossAway = helper.score(scoreInGround(scoreInAway),0).result();
+      $scope.dataaway = chartService.selfishPie.data(winLossAway);
 
       $scope.optionsaway = chartService.selfishPie.options();
 
+     
       $scope.$apply();
 
-      $scope.datahome = chartService.selfishPie.data(helper.score(scoreInGround(scoreInHome), 0).result());
+      var winLossHome = helper.score(scoreInGround(scoreInHome), 0).result();
+      
+      $scope.datahome = chartService.selfishPie.data(winLossHome);
       $scope.optionshome = chartService.selfishPie.options();
 
       $scope.$apply();
 
 
-      homePerformance();
+      homePerformance(winLossHome,winLossAway);
+      // awayPerformance(winLossAway);
+
     }, 2000);
   }
-
+  
   initSelfish(scoreInAway, scoreInHome);
-
-
-  function homePerformance() {
+  
+  
+  function homePerformance(home,away) {
     var homeSats = scoreInGround(scoreInHome);
+    $scope.wonInHome =  home.won.length;
+    $scope.totalMatchesHome = home.won.length + home.lost.length;
+    $scope.ratioHome = ($scope.wonInHome / home.lost.length).toFixed(2);
+    $scope.runsInHome = helper.score(homeSats,0).totalRuns();
+    $scope.homeGroundAverage = vm.calculateAverage(scoreInGround(scoreInHome));
+
+
     var homeOpp = helper.sortByOpposition(scoreInGround(scoreInHome))
     var homeMatches = helper.matchesPlayedAgainst(homeSats, homeOpp);
+    var performanceInHome = vm.averageAgainstCountry(homeMatches, homeOpp);
+
+
+
 
     var awaySats = scoreInGround(scoreInAway);
+    $scope.totalMatchesAway = away.won.length + away.lost.length;
+    $scope.wonInAway = away.won.length;
+    $scope.ratioAway = ($scope.wonInHome / away.lost.length).toFixed(2);
+    $scope.runsInAway = helper.score(awaySats,0).totalRuns();
+    $scope.awayGroundAverage = vm.calculateAverage(scoreInGround(scoreInAway));
+
     var awayOpp = helper.sortByOpposition(scoreInGround(scoreInAway))
     var awayMatches = helper.matchesPlayedAgainst(awaySats, awayOpp);
-    var performanceInHome = vm.averageAgainstCountry(homeMatches, homeOpp);
     var performanceInAway = vm.averageAgainstCountry(awayMatches, awayOpp);
+    
 
 
-    console.log(homeOpp)
-    console.log(homeMatches)
-    console.log(performanceInHome)
-    console.log(vm.calculateAverage(scoreInGround(scoreInHome)))
-    vm.averageAgainstCountry(awayMatches, awayOpp);
+
+
+    $scope.$apply();
+    homeVsAwayResult(performanceInHome,performanceInAway)
+
+  
+  }
+  
+
+  
+  
+  
+  function homeVsAwayResult(home,away){
+
+     var miniSortedAway = {};
+     var miniSortedHome = {};
+    const majorTeams =['Australia','Sri Lanka','South Africa','Pakistan','England','New Zealand'];
+
+    
+    $scope.horizData = chartService.homeVaway.data(home,away);
+    $scope.horizOptions = chartService.homeVaway.options();
+    
+    for (let index = 0; index < majorTeams.length; index++) {
+      miniSortedAway[majorTeams[index]] = away[majorTeams[index]];
+      miniSortedHome[majorTeams[index]] = home[majorTeams[index]];
+
+    }
+
+   
+    $scope.away = miniSortedAway;
+
+     
+    $scope.home = miniSortedHome;
+     
+     $scope.$apply();
 
   }
 
+  
 
 
+
+  
   // function performanceInUserState(v) {
-  //   var dataArr = [];
-  //   $http.get("http://extreme-ip-lookup.com/json/").then(function success(res) {
-
-  //     for (let index = 0; index < scoreInGround(scoreInHome).length; index++) {
-  //       if (res.data.city === scoreInGround(scoreInHome)[index].ground) {
-  //         dataArr.push(scoreInGround(scoreInHome)[index]);
+    //   var dataArr = [];
+    //   $http.get("http://extreme-ip-lookup.com/json/").then(function success(res) {
+      
+      //     for (let index = 0; index < scoreInGround(scoreInHome).length; index++) {
+        //       if (res.data.city === scoreInGround(scoreInHome)[index].ground) {
+          //         dataArr.push(scoreInGround(scoreInHome)[index]);
 
   //       }
 

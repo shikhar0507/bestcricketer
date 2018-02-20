@@ -60,11 +60,11 @@ app.factory('helper', function () {
 					var centuryAgaistOpp = [];
 					var sc = {};
 					var scoreResult ={};
-					// var scoreResult = [];
+				
 					var count =1;
 					
 					if (opp) {
-						// console.log(val);
+					
 						
 						val.map(function (s) {
 
@@ -88,7 +88,7 @@ app.factory('helper', function () {
 
 							}
 						});
-							// console.log(scoreResult)
+						
 						return scoreResult;
 					}
 
@@ -198,8 +198,6 @@ app.factory('helper', function () {
 		
 		
 		sortWeighted : function(dataSet,homeMatches,totalScore){
-			// console.log(dataSet)
-			// console.log(homeMatches)
 			const weights = {                          
 			  'Australia' : 1,
 			  'England' :0.7,
@@ -218,9 +216,9 @@ app.factory('helper', function () {
 			  'Zimbabwe':0.4,
 			}
 			var matches = homeMatches;
-			// console.log(matches);
+			
 			var teams = Object.keys(matches);
-			// var av = {};
+			
 			var weightedSet = {};
 			
 			for (let index = 0; index < teams.length; index++) {
@@ -270,6 +268,10 @@ var tickV =[];
 		donutChart : {
 			options: donutChartOptions,
 			data : donutChartData
+		},
+		homeVaway : {
+			options :horizontalBarOptions,
+			data :horizontalBarData
 		}
 	};
 
@@ -431,7 +433,7 @@ var tickV =[];
 		
 		function lineGraphData(data) {
 			
-			// console.log(data);
+			
 			
 			var c = [];
 			
@@ -441,9 +443,6 @@ var tickV =[];
 				score.push(data[d].score);
 			});
 
-			// console.log(c);
-			
-			// 		console.log(score);
 				
 			
 			var adder = [{
@@ -456,13 +455,13 @@ var tickV =[];
 			function convertDate(inputFormat) {
 				
 				var datum = Date.parse(inputFormat);
-				// console.log(datum);
+				
 				
 				return datum;
 			}
 			
 			for (var i = 0; i < c.length; i++) {
-				// console.log(score[i]);
+			
 				
 				adder[0].values.push([convertDate(c[i]), score[i]]);
 			}
@@ -477,7 +476,6 @@ var tickV =[];
 			return {
 				chart: {
 					type: 'pieChart',
-					height: 400,
 					x: function(d){return d.key;},
 					y: function(d){return d.y;},
 					showLabels: true,
@@ -490,7 +488,6 @@ var tickV =[];
 	}
 
 	function selfishGraphData(data){
-
 			var adder = [{
 				key: "won",
 				y: data.won.length
@@ -544,6 +541,51 @@ var tickV =[];
 	}
 		
 
+	function horizontalBarOptions() {
+		return {
+			chart: {
+                type: 'multiBarHorizontalChart',
+                // height: 450,
+                x: function(d){return d.label;},
+                y: function(d){return d.value;},
+                showControls: true,
+                showValues: true,
+                duration: 300,
+                xAxis: {
+                    showMaxMin: true
+				},
+                yAxis: {
+                    axisLabel: 'score',
+                    tickFormat: function(d){
+                        return d3.format('')(d);
+                    }
+                }
+            }
+		}
+	}
+
+	function horizontalBarData(home,away) {
+		
+		var commonTeams = Object.keys(home);
+		var adder = [{
+			"key": "Home",
+			"color": "#d62728",
+			values :[]
+		}, {
+			"key":"Away",
+			"color":"#1f77b4",
+			values:[]
+		}]
+
+		for (let index = 0; index < commonTeams.length; index++) {
+			adder[0].values.push({"label":commonTeams[index],"value":home[commonTeams[index]].totalRuns})
+			adder[1].values.push({"label":commonTeams[index],"value":away[commonTeams[index]].totalRuns })
+		}
+
+		
+		return adder;
+
+	}
 
 
 }]);

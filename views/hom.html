@@ -331,39 +331,159 @@
         <div class="content">
             <div class="heading-cont">
                 <h2 class="heading">
-                    Sachin's  Performance in Home Vs Away
+                    Home Vs Away
                 </h2>
                 <h3 class="heading">Team win/loss in home & away matches when sachin was batting</h3>
             </div>
         </div>
-        
-        <div class="col-md-6 home">
-            <div class="selfish-container-home">
+        <div class="pies">
+        <div class="pb-20">
+            <div class="details col-md-3">
+                <div class="content">
+                    
+                  <p class="stat"> Matches played In Home: {{totalMatchesHome}}
+                   
+                </p> 
+                <p class="stat">Matches Won By India : {{wonInHome}}</p>
+                <p class="stat">Win /lost Ratio: {{ratioHome}}</p>
+
+                <p class="stat"> Runs Scored by sachin : {{runsInHome}}</p>
+                <p class="stat">Average In Home ground : {{homeGroundAverage}}</p>
+                </div>
+            </div>
+            <div class="selfish-container-home col-md-3 home">
         
                 <nvd3 options="optionshome" data="datahome"></nvd3>
                 
+            </div>
+
+
+        
+
+
+       
+            
+            <div class="selfish-container-away col-md-3 away">
                 
+                <nvd3 options="optionsaway" data="dataaway" api="api"></nvd3>
+    
+            </div>
+            <div class="details col-md-3">
+                    <div class="content">
+                    
+                            <p class="stat"> Matches played In Away: {{totalMatchesAway}}
+                             
+                          </p> 
+                          <p class="stat">Matches Won By India : {{wonInAway}}</p>
+                          <p class="stat">Win /lost Ratio: {{ratioAway}}</p>
+          
+                          <p class="stat">Runs Scored by sachin : {{runsInAway}}</p>
+                          <p class="stat">Average In Away ground : {{awayGroundAverage}}</p>
+                          </div>
+                </div>
+
+
+
+
+       
+    </div>
+    </div>
+    </div>
+
+
+    <div class="col-md-12 col-xs-12 HAresult pt-20">
+            <div class="details">
+                    <div class="content">
+                    <h1 class="heading">    Sachin's batting performance in Home Vs Away
+                        </h1>
+                    </div>    
+                </div>
+        <div class="col-md-8">        
+        <nvd3 options="horizOptions" data="horizData"></nvd3>
+    </div>
+    <div class="col-md-4">
+        <div class="details">
+            <div class="content">
+                <h3 class="positive">
+
+                    Against almost every Major Team sachin has scored more runs in Away ground than in Home ground. <br><br>
+                    Sachin's ability to perform in Away grounds is as good as his ability to perform in home grounds.
+
+
+                </h3>
             </div>
         </div>
-
-
-        <div class="col-md-6 away">
-              
-    <div class="selfish-container-away">
-
-        <nvd3 options="optionsaway" data="dataaway" api="api"></nvd3>
-    
-    
     </div>
 
+    <div class="col-md-12 pt-20">
+            <div class="details pt-20">
+                    <div class="content">
+                    <h2 class="heading">  
+                        Average Runs Statistics in Home vs Away  
+                        </h2>
+                    </div>    
+                </div>
+                <div class="pt-20 pb-20">
+                <div class="col-md-6 pb-20">
+                        <div class="table-wrap scrollbar no-overflow">
+                                <table style="width: 100%;">
+                                    <tr>
+                                        <th style="text-align:center">
+                                            opposition
+                                        </th>
+                                        <th style="text-align:center">
+                                            Average
+                                        </th>
+                                  
+                                    </tr>
+        
+                                    <tr ng-repeat="(key,value) in home track by $index">
+                                        <td style="text-align:center">{{key}}</td>
+                                        <td  style="text-align:center">{{value.average}}</td>
+                                  
+                                    </tr>
+                                    <!-- <td style="text-align:center">{{value}}</td> -->
+                                        <!-- <td>{{value.score}}</td> -->
+        
+                                </table>
+                            </div>
+                </div>
+                <div class="col-md-6 no-overflow pb-20">
+                        <div class="table-wrap scrollbar">
+                                <table style="width: 100%;">
+                                    <tr>
+                                        <th style="text-align:center">
+                                                opposition
+                                        </th>
+                                        <th style="text-align:center">
+                                                Average
+                                        </th>
+                                  
+                                    </tr>
+        
+                                    <tr ng-repeat="(key,value) in away track by $index">
+                                        <td style="text-align:center">{{key}}</td>
+                                        <td  style="text-align:center">{{value.average}}</td>
+                                  
+                                    </tr>
+                                    <!-- <td style="text-align:center">{{value}}</td> -->
+                                        <!-- <td>{{value.score}}</td> -->
+        
+                                </table>
+                            </div>
+                </div>
+                <div class="content final-table-result col-md-6 col-md-offset-3">
+                        <h3 class="heading positive">
+                               Although Sachin has scored more runs in Away matches but his average is higher against Major Teams in Home matches.
+                               His overall batting performance have led to more wins in home matches than in away matches. 
+                        </h3>
+                    </div>
+            </div>
+            </div>
 
-
-
+          
 
         </div>
-
-    </div>
-
-
+</div>
 
 

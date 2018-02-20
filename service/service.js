@@ -1,7 +1,7 @@
 
 
 app.service('service',function($http){
-const url = "http://localhost:8000/n";
+const url = "https://player-analysis.herokuapp.com/";
 const gmaps = "AIzaSyBJTGYSpyjSwPoa_raHDwjiREvjHU0yfjg";
 
 var groundDetails = {};

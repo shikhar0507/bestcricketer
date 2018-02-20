@@ -5,10 +5,10 @@ const app = express();
 
 
 
-const port =8000;
-app.listen(port,() => {
+// const port =8000;
+// app.listen(port,() => {
     
-});
+// });
 
 var jsonData = [];
 
@@ -25,7 +25,7 @@ app.use(function(req,res,next){
     next();
 })
     
- app.get('/n',function(req,res,next){
+ app.get('/',function(req,res,next){
 
 res.send(jsonData);
      

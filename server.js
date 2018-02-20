@@ -26,9 +26,8 @@ app.use(function(req,res,next){
 })
     
  app.get('/',function(req,res,next){
-
-res.send(jsonData);
+        res.send(jsonData);
      
- })   
+})   
 
 module.exports = app;

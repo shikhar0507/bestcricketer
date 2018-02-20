@@ -199,7 +199,7 @@ app.factory('helper', function () {
 		
 		sortWeighted : function(dataSet,homeMatches,totalScore){
 			// console.log(dataSet)
-			console.log(homeMatches)
+			// console.log(homeMatches)
 			const weights = {                          
 			  'Australia' : 1,
 			  'England' :0.7,
@@ -218,7 +218,7 @@ app.factory('helper', function () {
 			  'Zimbabwe':0.4,
 			}
 			var matches = homeMatches;
-			console.log(matches);
+			// console.log(matches);
 			var teams = Object.keys(matches);
 			// var av = {};
 			var weightedSet = {};

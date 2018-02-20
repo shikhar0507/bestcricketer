@@ -164,7 +164,7 @@
                     <nvd3 options="stackedBarOptions" data="stackedBarData"></nvd3>
                      <div class="average-analysis content">
                          <h3 class="heading-4">
-                            Total Carrer Average : {{carrerAverage}}
+                            Total Carrer Average : {{main.sendDataforAverage()}}
                          </h3>
                          <h3 class="heading-big positive">
                              According to the ranking system, even though sachin has scored more runs against Sri Lanka, He has delieverd better perfomance against a dominant opposition like Australia
@@ -327,16 +327,17 @@
     </div>
 
     <div class="home-away-stats col-md-12 col-xs-12">
-
+        
         <div class="content">
             <div class="heading-cont">
                 <h2 class="heading">
                     Sachin's  Performance in Home Vs Away
                 </h2>
+                <h3 class="heading">Team win/loss in home & away matches when sachin was batting</h3>
             </div>
         </div>
-
-        <div class="col-md-6">
+        
+        <div class="col-md-6 home">
             <div class="selfish-container-home">
         
                 <nvd3 options="optionshome" data="datahome"></nvd3>
@@ -346,7 +347,7 @@
         </div>
 
 
-        <div class="col-md-6">
+        <div class="col-md-6 away">
               
     <div class="selfish-container-away">
 
@@ -354,6 +355,11 @@
     
     
     </div>
+
+
+
+
+
         </div>
 
     </div>

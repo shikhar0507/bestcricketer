@@ -200,6 +200,16 @@ margin: 0;
   }
 
 
-  .selfish-container-home {
+  .selfish-container-home svg.nvd3-svg{
+    
+    margin-left:-15%;
       
+  }
+  .selfish-container-away svg.nvd3-svg{
+    
+      margin-left:5%;
+  }
+
+  .home {
+      border-right: 1px solid gray;
   }

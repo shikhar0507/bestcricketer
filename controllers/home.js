@@ -6,76 +6,84 @@ app.controller('home', function ($scope, $location, $http, helper, service, char
   var mainData;
 
   service.getData().then(function (res) {
-    
+
     vm.parsedData = helper.parse(res, "*");
     mainData = angular.copy(vm.parsedData)
     var countryVscore = helper.sortByOpposition(mainData);
-  
-    $scope.totalRuns = helper.score(vm.parsedData, 100).totalRuns();
-    
 
-    vm.calculateAverage =function(){
-      var average = {};
-      const totalMatches = mainData.length;
-      const runs = helper.score(mainData).totalRuns();
-      $scope.carrerAverage = Math.round(runs / totalMatches);  
+    $scope.totalRuns = helper.score(vm.parsedData, 100).totalRuns();
+
+    vm.sendDataforAverage = function () {
+      return vm.calculateAverage(mainData);
     }
 
-    vm.calculateAverage();
-    
-    vm.averageAgainstCountry = function(match,opp){
 
-      
+    vm.calculateAverage = function (data) {
+      // console.log(data)
+      const totalMatches = data.length;
+      const runs = helper.score(data).totalRuns();
+      return Math.round(runs / totalMatches);
+    }
+
+    // vm.calculateAverage(mainData);
+
+    vm.averageAgainstCountry = function (match, opp) {
+
+
       var teams = Object.keys(match);
- 
+
       var set = {};
-      
+
       for (let index = 0; index < teams.length; index++) {
-    
-        
-           
-            av = Math.round(opp[teams[index]] / match[teams[index]]);
-          
-          
-           set[teams[index]] = {"average":av,"totalRuns":opp[teams[index]],"totalMatches":match[teams[index]]}
-         
+
+
+
+        av = Math.round(opp[teams[index]] / match[teams[index]]);
+
+
+        set[teams[index]] = {
+          "average": av,
+          "totalRuns": opp[teams[index]],
+          "totalMatches": match[teams[index]]
         }
-        return set;
-     
+
       }
+      return set;
 
-      function initWeightedSystem(){
-        var totalScore = helper.sortByOpposition(mainData);
-        console.log(totalScore)
-        var countMatches = helper.matchesPlayedAgainst(mainData,totalScore);
-        console.log(countMatches);
-        
-        $scope.weightedResult = helper.sortWeighted(mainData,countMatches,totalScore);
-        console.log($scope.weightedResult)
-      }
-      initWeightedSystem();
-      // vm.averageAgainstCountry();
+    }
+
+    function initWeightedSystem() {
+      var totalScore = helper.sortByOpposition(mainData);
+      // console.log(totalScore)
+      var countMatches = helper.matchesPlayedAgainst(mainData, totalScore);
+      // console.log(countMatches);
+
+      $scope.weightedResult = helper.sortWeighted(mainData, countMatches, totalScore);
+      // console.log($scope.weightedResult)
+    }
+    initWeightedSystem();
+    // vm.averageAgainstCountry();
 
 
 
-   
+
     //bar graph    
-     vm.initBarGraph = function (mode) {
+    vm.initBarGraph = function (mode) {
 
       document.querySelector('.discrete-bar').style.display = "block";
       document.querySelector('.average-analysis').style.display = "block";
 
-      $scope.battingScoreTotal = chartService.barGraph.data(countryVscore,mode);
+      $scope.battingScoreTotal = chartService.barGraph.data(countryVscore, mode);
       $scope.battingScoreTotalOptions = chartService.barGraph.options();
 
     }
 
     // vm.initBarGraph();
 
-    vm.initStackedMultiBar = function(mode){
+    vm.initStackedMultiBar = function (mode) {
       document.querySelector('.totalRuns').style.display = "block";
       // totalRuns
-      $scope.stackedBarData = chartService.multiBar.data(countryVscore,mode);
+      $scope.stackedBarData = chartService.multiBar.data(countryVscore, mode);
       $scope.stackedBarOptions = chartService.multiBar.options();
     }
     vm.initStackedMultiBar();
@@ -84,7 +92,7 @@ app.controller('home', function ($scope, $location, $http, helper, service, char
 
     // line graph
     $scope.selectCountry = function (c) {
-     
+
       initGraph(c);
     }
 
@@ -96,14 +104,14 @@ app.controller('home', function ($scope, $location, $http, helper, service, char
       $scope.data = chartService.lineChart.data($scope.dataForLine.Match);
       $scope.options = chartService.lineChart.options();
 
-      calculateLoss($scope.dataForLine,c)
+      calculateLoss($scope.dataForLine, c)
     }
 
 
 
-    function calculateLoss(resultArr,c) {
-      console.log(resultArr);
-      
+    function calculateLoss(resultArr, c) {
+      // console.log(resultArr);
+
       var winLength = [];
       var losLength = [];
       var tempCentury = [];
@@ -113,16 +121,16 @@ app.controller('home', function ($scope, $location, $http, helper, service, char
         } else {
           losLength.push(resultArr.Match[date].result)
         }
-        
-        
-        c ? $scope.againstTeam = "against "+ c : $scope.againstTeam = '(Overall)';
-        
+
+
+        c ? $scope.againstTeam = "against " + c : $scope.againstTeam = '(Overall)';
+
         $scope.win = winLength.length;
         $scope.loss = losLength.length;
-        
-        $scope.totalCenturiesAgasintOpp = helper.score(mainData,100).totalCenturies(c).total;    
-        $scope.totalCenturies = helper.score(mainData,100).totalCenturies(c).total;    
-      
+
+        $scope.totalCenturiesAgasintOpp = helper.score(mainData, 100).totalCenturies(c).total;
+        $scope.totalCenturies = helper.score(mainData, 100).totalCenturies(c).total;
+
 
       });
       initDonutForCentury(winLength.length, losLength.length);
@@ -134,7 +142,7 @@ app.controller('home', function ($scope, $location, $http, helper, service, char
     function initDonutForCentury(win, loss) {
 
       $scope.donutData = chartService.donutChart.data(win, loss);
-  
+
 
       $scope.donutOptions = chartService.donutChart.options();
     }
@@ -213,32 +221,38 @@ app.controller('home', function ($scope, $location, $http, helper, service, char
 
       $scope.datahome = chartService.selfishPie.data(helper.score(scoreInGround(scoreInHome), 0).result());
       $scope.optionshome = chartService.selfishPie.options();
-      
+
       $scope.$apply();
 
-      
+
       homePerformance();
     }, 2000);
   }
-  
+
   initSelfish(scoreInAway, scoreInHome);
-  
-  
-  function homePerformance (){
+
+
+  function homePerformance() {
     var homeSats = scoreInGround(scoreInHome);
     var homeOpp = helper.sortByOpposition(scoreInGround(scoreInHome))
-    var homeMatches = helper.matchesPlayedAgainst(homeSats,homeOpp);
+    var homeMatches = helper.matchesPlayedAgainst(homeSats, homeOpp);
 
     var awaySats = scoreInGround(scoreInAway);
     var awayOpp = helper.sortByOpposition(scoreInGround(scoreInAway))
-    var awayMatches = helper.matchesPlayedAgainst(awaySats,awayOpp);
-    console.log(vm.averageAgainstCountry(homeMatches,homeOpp));
-    
-    console.log(vm.averageAgainstCountry(homeMatches,awayOpp));
-    
+    var awayMatches = helper.matchesPlayedAgainst(awaySats, awayOpp);
+    var performanceInHome = vm.averageAgainstCountry(homeMatches, homeOpp);
+    var performanceInAway = vm.averageAgainstCountry(awayMatches, awayOpp);
+
+
+    console.log(homeOpp)
+    console.log(homeMatches)
+    console.log(performanceInHome)
+    console.log(vm.calculateAverage(scoreInGround(scoreInHome)))
+    vm.averageAgainstCountry(awayMatches, awayOpp);
+
   }
-  
-  
+
+
 
   // function performanceInUserState(v) {
   //   var dataArr = [];

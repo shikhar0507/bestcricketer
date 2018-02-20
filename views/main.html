@@ -1,0 +1,483 @@
+<div class="container-fluid">
+
+
+    <div class="col-md-12  pb-30">
+        <div class="profile-stats">
+        <div class="content">
+            <h1 class="heading positive">
+                Is Sachin The Greatest Batsmen Ever ? 
+            </h1>
+        </div>
+        <div class="profile">
+            <div class="photo-container pb-20">
+                <img src="img/profile.jpg" class="photo">
+                <h3 class="heading">Sachin Tendulkar </h3>
+                      
+            </div>
+<div class="col-md-8  col-md-offset-2">
+            <div class="col-md-6">
+                <ul>
+                    <li>
+
+                            <b> Total Runs Scored</b> : {{main.profileRuns}}
+                    </li>
+                    <li>
+
+                            <b> Total Centuries Scored </b>: {{main.profileCenturies}}
+                    </li>
+                    <li>
+                            <b>  Average </b>: {{main.sendDataforAverage()}}
+                    </li>
+                    <li>
+                            <b> Total Innings</b> : {{main.profileInnings}}
+                    </li>
+                    <li>
+                            <b> Runs Scored In Delhi</b> : {{main.userStateRuns}}
+                    </li>
+
+                </ul>
+
+
+            </div>
+            <div class="col-md-6">
+                <ul style="padding-left: 73px;">
+                    <li>
+                        <b>Total Wickets</b>: {{main.profileWickets}}
+                    </li>
+                    <li>
+                            <b>Powerful against</b> : Australia
+                    </li>
+                    <li>
+                            <b> Runs Scored In Home</b>: {{runsInHome}}
+                    </li>
+                    <li>
+                            <b> Runs Scored In Away</b> : {{runsInAway}}
+                    </li>
+                    <li>
+                            <b> Average Score In Delhi </b> : {{main.userStateAverage}}
+                    </li>
+                </ul>
+            </div>
+        </div>
+     
+        </div>
+        </div>
+
+
+
+    </div>
+
+
+
+
+
+
+
+
+
+    <div class="pt-10 col-md-12 col-xs-12">
+
+        <div class="content">
+            <div class="heading-cont">
+                <h2 class="heading">
+                    Sachin's Batting Performance against other teams
+                </h2>
+            </div>
+        </div>
+
+        <div class="batting-performance col-md-12 col-xs-12 pb-30">
+            <div class="bar-container col-md-6 col-xs-6">
+                <div class="data-values col-md-12">
+                    <div class="content">
+                        <div class="heading-container pb-10">
+                            *
+                            <em>This is a ranking system where opposition average is multiplied by its strength (weight) . Australia's
+                                weight is 1 and Nambia's weight is 0.1 </em>
+                        </div>
+                        <div class="table-wrap scrollbar">
+                            <table style="width: 100%;">
+                                <tr>
+                                    <th style="text-align:center">
+                                        Team
+                                    </th>
+                                    <th style="text-align:center">
+                                        Points *
+                                    </th>
+
+                                </tr>
+
+                                <tr ng-repeat="(key,value) in weightedResult">
+                                    <td style="text-align:center">{{key}}</td>
+                                    <td style="text-align:center">{{value.average}}</td>
+
+                                </tr>
+                                <!-- <td style="text-align:center">{{value}}</td> -->
+                                <!-- <td>{{value.score}}</td> -->
+
+                            </table>
+                        </div>
+                        <div class="show pt-20 pb-10">
+                            <button class="btn btn-primary show-bardata" ng-click="main.initBarGraph()">Show Analysis</button>
+                        </div>
+                    </div>
+                    <div class="discrete-bar">
+                        <div class="col-md-3 col-xs-3">
+                            <div class="sorter" ng-click="main.initBarGraph('asc');main.initStackedMultiBar('asc');">
+                                <button  class="mode-select asc"></button>
+                                <span>Ascending</span>
+                            </div>
+
+                        </div>
+                        <div class="col-md-3 col-xs-3">
+                            <div class="sorter" ng-click="main.initBarGraph('dsc');main.initStackedMultiBar('dsc');">
+                                <button class="mode-select dsc"></button>
+                                <span>Descending</span>
+                            </div>
+
+                        </div>
+                        <div class="pt-30">
+                            <nvd3 options="battingScoreTotalOptions" data="battingScoreTotal"></nvd3>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="totalRuns col-md-6 pt-30">
+                <nvd3 options="stackedBarOptions" data="stackedBarData"></nvd3>
+                <div class="average-analysis content">
+                    <h3 class="heading-4">
+                        Total Carrer Average : {{main.sendDataforAverage()}}
+                    </h3>
+                    <h3 class="heading-big positive">
+                        According to the ranking system, even though sachin has scored more runs against Sri Lanka, He has delieverd better perfomance
+                        against a dominant opposition like Australia followed by New Zealand, Sri Lanka, Pakistan & England.
+                    </h3>
+                    <h1>
+
+                    </h1>
+
+                </div>
+
+            </div>
+        </div>
+
+        <div class="col-md-12 col-xs-12 pt-20">
+
+            <div class="heading-cont">
+                <h2 class="heading">Sachin's Century Record</h2>
+            </div>
+
+            <div class="col-md-8 col-xs-6 century-graph-container">
+            <em style="padding-left:25px;padding-bottom:5px;"> * select country to sort country wise data</em> 
+                <div class="col-md-12 col-xs-12 pt-10">
+                    <div class="col-md-2 col-xs-2">
+                        <div class="country-cont" ng-click="selectCountry('Pakistan')">
+                            <button class="country-select country-pak"></button>
+                            <span>Pakistan</span>
+                        </div>
+
+                    </div>
+                    <div class="col-md-2 col-xs-2">
+                        <div class="country-cont" ng-click="selectCountry('Australia')">
+
+                            <button class="country-select country-aus"></button>
+                            <span>Australia</span>
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-xs-2">
+                        <div class="country-cont" ng-click="selectCountry('West Indies')">
+
+                            <button class="country-select country-eng"></button>
+                            <span>West Indies</span>
+                        </div>
+                    </div>
+                    <div class="col-md-2 col-xs-2">
+                        <div class="country-cont" ng-click="selectCountry('Sri Lanka')" >
+
+                            <button  class="country-select country-sl"></button>
+                            <span>Sri Lanka</span>
+                        </div>
+
+                    </div>
+
+                    <div class="col-md-3 col-xs-3 ">
+                        <div class="country-cont" ng-click="selectCountry('New Zealand')">
+
+                            <button  class="country-select country-nz"></button>
+                            <span>New Zealand</span>
+                        </div>
+                    </div>
+                    <div class="col-md-2  col-xs-2">
+                        <div class="country-cont" ng-click="selectCountry('South Africa')">
+
+                            <button  class="country-select country-sa"></button>
+                            <span>South Africa</span>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="col-md-2  col-xs-2">
+                        <div class="country-cont" ng-click="selectCountry()">
+                            <button  class="country-select country-all"></button>
+                            <span>All</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="line-chart-century">
+                    <nvd3 options="options" data="data"></nvd3>
+                </div>
+            </div>
+
+
+            <div class="col-md-4 col-xs-4">
+                <div class="century-table">
+
+                    <div class="table-wrap scrollbar">
+                        <table style="margin: 0px auto;">
+                            <tr>
+                                <th>
+                                    Date
+                                </th>
+                                <th>
+                                    Result
+                                </th>
+                                <th>
+                                    Score
+                                </th>
+                            </tr>
+
+                            <tr ng-repeat="(key,value) in dataForLine.Match">
+                                <td>{{key}}</td>
+                                <td>{{value.result}}</td>
+                                <td>{{value.score}}</td>
+                            </tr>
+
+                        </table>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+
+
+
+
+        <div class="century-analysis col-md-12 col-xs-12 pt-20">
+            <div class="col-md-6 col-xs-4">
+                <div class="content">
+                    <div class="heading-cont">
+                        <h2 class="heading-2">Match result When Sachin has scored a 100 {{againstTeam}}</h2>
+                    </div>
+                    <div class="details">
+                        <div class="table-result">
+                            <div class="won">
+                                <p>Total Matches Won
+                                    <span>{{win}}</span>
+                                </p>
+                            </div>
+                            <div class="lost">
+                                <p>Total Matches Lost
+                                    <span>{{loss}}</span>
+                                </p>
+                            </div>
+                            <div class="centuries">
+                                <p>Total centuries
+                                    <span>{{totalCenturies}}</span>
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="heading-big positive">
+                        <h1>Overall Sachin is not a selfish player. India has won 67 % of the matches when sachin has scored
+                            a century. </h1>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-xs-6">
+                <div class="donut-chart-century">
+                    <nvd3 options="donutOptions" data="donutData"></nvd3>
+                </div>
+
+            </div>
+        </div>
+
+
+
+    </div>
+
+    <div class="home-away-stats col-md-12 col-xs-12">
+
+        <div class="">
+            <div class="heading-cont">
+                <h1 class="heading">
+                    Home Vs Away
+                </h1>
+                <h4 class="heading pt-10">Team Statistics when Sachin was batting</h4>
+            </div>
+        </div>
+        <div class="pies">
+            <div class="pb-20 pt-30">
+                <div class="details col-md-3">
+                    <div class="content">
+
+                        <p class="stat"> Matches played In Home: {{totalMatchesHome}}
+
+                        </p>
+                        <p class="stat">Matches Won By India : {{wonInHome}}</p>
+                        <p class="stat">Win /lost Ratio: {{ratioHome}}</p>
+
+                        <p class="stat"> Runs Scored by sachin : {{runsInHome}}</p>
+                        <p class="stat">Average In Home ground : {{homeGroundAverage}}</p>
+                    </div>
+                </div>
+                <div class="selfish-container-home col-md-3 home">
+
+                    <nvd3 options="optionshome" data="datahome"></nvd3>
+
+                </div>
+
+
+
+
+
+
+
+                <div class="selfish-container-away col-md-3 away">
+
+                    <nvd3 options="optionsaway" data="dataaway" api="api"></nvd3>
+
+                </div>
+                <div class="details col-md-3">
+                    <div class="content">
+
+                        <p class="stat"> Matches played In Away: {{totalMatchesAway}}
+
+                        </p>
+                        <p class="stat">Matches Won By India : {{wonInAway}}</p>
+                        <p class="stat">Win /lost Ratio: {{ratioAway}}</p>
+
+                        <p class="stat">Runs Scored by sachin : {{runsInAway}}</p>
+                        <p class="stat">Average In Away ground : {{awayGroundAverage}}</p>
+                    </div>
+                </div>
+
+
+
+
+
+            </div>
+        </div>
+    </div>
+
+
+    <div class="col-md-12 col-xs-12 HAresult pt-30">
+        <div class="details pb-30">
+            <div class="content">
+                <h2 class="heading"> Sachin's batting performance in Home Vs Away
+                </h2>
+            </div>
+        </div>
+        <div class="col-md-8 pt-30">
+            <nvd3 options="horizOptions" data="horizData"></nvd3>
+        </div>
+        <div class="col-md-4">
+            <div class="details">
+                <div class="content">
+                    <h3 class="positive">
+
+                        Against almost every Major Team sachin has scored more runs in Away ground than in Home ground.
+                        <br>
+                        <br> Sachin's ability to perform in Away grounds is as good as his ability to perform in home grounds.
+
+
+                    </h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-12 pt-10">
+            <div class="details pt-20">
+                <div class="content">
+                    <h3 class="heading">
+                        Average Runs Statistics in Home vs Away
+                    </h3>
+                </div>
+            </div>
+            <div class="pt-20 pb-20">
+                <div class="col-md-6 pb-20">
+                    <div class="table-wrap scrollbar no-overflow">
+                        <table style="width: 100%;">
+                            <tr>
+                                <th style="text-align:center">
+                                    opposition
+                                </th>
+                                <th style="text-align:center">
+                                    Average
+                                </th>
+
+                            </tr>
+
+                            <tr ng-repeat="(key,value) in home track by $index">
+                                <td style="text-align:center">{{key}}</td>
+                                <td style="text-align:center">{{value.average}}</td>
+
+                            </tr>
+                            <!-- <td style="text-align:center">{{value}}</td> -->
+                            <!-- <td>{{value.score}}</td> -->
+
+                        </table>
+                    </div>
+                </div>
+                <div class="col-md-6 no-overflow pb-20">
+                    <div class="table-wrap scrollbar">
+                        <table style="width: 100%;">
+                            <tr>
+                                <th style="text-align:center">
+                                    opposition
+                                </th>
+                                <th style="text-align:center">
+                                    Average
+                                </th>
+
+                            </tr>
+
+                            <tr ng-repeat="(key,value) in away track by $index">
+                                <td style="text-align:center">{{key}}</td>
+                                <td style="text-align:center">{{value.average}}</td>
+
+                            </tr>
+                            <!-- <td style="text-align:center">{{value}}</td> -->
+                            <!-- <td>{{value.score}}</td> -->
+
+                        </table>
+                    </div>
+                </div>
+                <div class="content final-table-result col-md-6">
+                    <h3 class="heading">
+                        Although Sachin has scored more runs in Away matches but his average is higher against Major Teams in Home matches. His overall
+                        batting performance have led to more wins in home matches than in away matches.
+                    </h3>
+                    
+                   
+                </div>
+                <div class="content col-md-6  final-table-result">
+
+                        <h3 class="heading positive " style="text-align:justify">
+                                Sachin has scored many match winning centuries against powerful opponents & combined with 23 years of being an all rounder
+                                who has scored a total of {{main.profileRuns}} runs, He is one of the greatest batsmen in the world. 
+                            </h3>
+            </div>
+            
+        </div>
+
+
+
+    
+    </div>
+ 
+</div>   

@@ -7,8 +7,20 @@ app.controller('home', function ($scope, $location, $http, helper, service, char
 
   service.getData().then(function (res) {
 
+
     vm.parsedData = helper.parse(res, "*");
     mainData = angular.copy(vm.parsedData)
+    
+    vm.initProfile = function(){
+      vm.profileInnings = mainData.length;
+      vm.profileRuns = helper.score(mainData).totalRuns();
+      vm.profileCenturies = helper.score(mainData, 100).totalCenturies().total;
+      vm.profileWickets = helper.wickets(mainData).totalWickets;
+      console.log(vm.profileWickets);
+    }
+    vm.initProfile();
+
+
     var countryVscore = helper.sortByOpposition(mainData);
 
     $scope.totalRuns = helper.score(vm.parsedData, 100).totalRuns();
@@ -306,32 +318,32 @@ app.controller('home', function ($scope, $location, $http, helper, service, char
   
 
 
-
-  
-  // function performanceInUserState(v) {
-    //   var dataArr = [];
-    //   $http.get("http://extreme-ip-lookup.com/json/").then(function success(res) {
+  function performanceInUserState(v) {
+      var dataArr = [];
+      $http.get("http://extreme-ip-lookup.com/json/").then(function success(res) {
       
-      //     for (let index = 0; index < scoreInGround(scoreInHome).length; index++) {
-        //       if (res.data.city === scoreInGround(scoreInHome)[index].ground) {
-          //         dataArr.push(scoreInGround(scoreInHome)[index]);
+          for (let index = 0; index < scoreInGround(scoreInHome).length; index++) {
+              if (res.data.city === scoreInGround(scoreInHome)[index].ground) {
+                  dataArr.push(scoreInGround(scoreInHome)[index]);
 
-  //       }
+        }
 
-  //     }
+      }
 
-  //     $scope.userStateRuns = helper.score(dataArr, 0).totalRuns();
+      vm.userStateRuns = helper.score(dataArr, 0).totalRuns();
 
-  //     $scope.userStateAverage = $scope.userStateRuns / dataArr.length;
-  //     $scope.userStateWickets = helper.wickets(dataArr);
+     vm.userStateAverage =  vm.userStateRuns / dataArr.length;
+      vm.userStateWickets = helper.wickets(dataArr);
 
-  //   });
-  // }
+     
 
-  // setTimeout(function () {
+    });
+  }
 
-  //   performanceInUserState();
-  // }, 1000);
+  setTimeout(function () {
+
+    performanceInUserState();
+  }, 1000);
 
 
 

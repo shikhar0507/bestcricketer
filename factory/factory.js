@@ -131,11 +131,19 @@ app.factory('helper', function () {
 
 		wickets : function(data){
 			var wicket = {};
-			var wicketTotal = [];
+			var wicketTaken = [];
 			for (let index = 0; index < data.length; index++) {
-				wicketTotal.push(data[index].wickets)
-			}
-			wicket["totalWickets"] =wicketTotal.length;
+				
+				if (data[index].wickets >= 1) {
+					wicketTaken.push(data[index].wickets);
+				}
+				}
+			var wicketTotal = wicketTaken.reduce(function (a, b) {
+					return a + b;
+			});
+
+			
+			wicket["totalWickets"] =wicketTotal;
 			
 			return wicket;
 		},

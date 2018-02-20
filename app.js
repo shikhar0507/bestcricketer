@@ -7,14 +7,12 @@ app.config(function($stateProvider,$urlRouterProvider) {
 
         .state('home', {
             url:'/home',
-            templateUrl : 'views/hom.html',
+            templateUrl : 'views/main.html',
             controller:'home',
             controllerAs:'main'
         })
 
-        .state('n',{
-            url:'/n',
-            templateUrl: '/views/n.html',
-            controller:'n'
-        })
-});
+        
+    });
+    
+   

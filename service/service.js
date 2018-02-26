@@ -1,7 +1,7 @@
 
 
 app.service('service',function($http){
-const url = "http://localhost:8080/";
+	const url = "https://sachindataset.herokuapp.com/";
 const gmaps = "AIzaSyBJTGYSpyjSwPoa_raHDwjiREvjHU0yfjg";
 
 var groundDetails = {};
@@ -11,6 +11,7 @@ this.getData = function(){
 
 	
  return $http.get(url).then(function(response) {
+	 console.log(response)
 	var data =  response.data;
 	return data;
 

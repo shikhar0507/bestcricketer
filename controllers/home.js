@@ -4,6 +4,7 @@ app.controller('home', function ($scope, $location, $http, helper, service, char
 
 
   var mainData;
+  setTimeout(function(){
 
   service.getData().then(function (res) {
 
@@ -162,6 +163,7 @@ app.controller('home', function ($scope, $location, $http, helper, service, char
     isSelfish(mainData, vm.parsedData);
 
   })
+},600)
 
 
 
@@ -182,7 +184,7 @@ app.controller('home', function ($scope, $location, $http, helper, service, char
         isHome(v, mainData)
         // performanceInUserState(v);
       }
-    }, 100)
+    }, 300)
   }
 
 
@@ -343,7 +345,7 @@ app.controller('home', function ($scope, $location, $http, helper, service, char
   setTimeout(function () {
 
     performanceInUserState();
-  }, 1000);
+  }, 2000);
 
 
 

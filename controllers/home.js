@@ -342,7 +342,7 @@ app.controller('home', function ($scope, $location, $http, helper, service, char
       
       
     });
-  }, 2000);
+  }, 4000);
   }
 
 

@@ -346,7 +346,7 @@ app.controller('home', function ($scope, $location, $http, helper, service, char
     setTimeout(function () {
       
       performanceInUserState();
-    }, 4000);
+    }, 2000);
   
   
   

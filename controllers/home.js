@@ -322,7 +322,8 @@ app.controller('home', function ($scope, $location, $http, helper, service, char
 
   function performanceInUserState(v) {
       var dataArr = [];
-      $http.get("http://extreme-ip-lookup.com/json/").then(function success(res) {
+      $http.get("https://extreme-ip-lookup.com/json/").then(function success(res) {
+        console.log(res)
       
           for (let index = 0; index < scoreInGround(scoreInHome).length; index++) {
               if (res.data.city === scoreInGround(scoreInHome)[index].ground) {

@@ -320,33 +320,35 @@ app.controller('home', function ($scope, $location, $http, helper, service, char
   
 
 
-  function performanceInUserState(v) {
-      var dataArr = [];
-      $http.get("https://ipinfo.io/json").then(function success(res) {
-        console.log(res)
+  /** Extra feautre but due to slow loading on the api this feature is not working as of 26th feburary */
+  /** It shows sachin's stats in the end user's state */
+  // function performanceInUserState(v) {
+  //     var dataArr = [];
+  //     $http.get("https://ipinfo.io/json").then(function success(res) {
+  //       console.log(res)
         
-        for (let index = 0; index < scoreInGround(scoreInHome).length; index++) {
-          if (res.data.city === scoreInGround(scoreInHome)[index].ground) {
-            dataArr.push(scoreInGround(scoreInHome)[index]);
+  //       for (let index = 0; index < scoreInGround(scoreInHome).length; index++) {
+  //         if (res.data.city === scoreInGround(scoreInHome)[index].ground) {
+  //           dataArr.push(scoreInGround(scoreInHome)[index]);
             
-          }
+  //         }
           
-        }
+  //       }
         
-        vm.userStateRuns = helper.score(dataArr, 0).totalRuns();
+  //       vm.userStateRuns = helper.score(dataArr, 0).totalRuns();
         
-        vm.userStateAverage =  vm.userStateRuns / dataArr.length;
-        vm.userStateWickets = helper.wickets(dataArr);
+  //       vm.userStateAverage =  vm.userStateRuns / dataArr.length;
+  //       vm.userStateWickets = helper.wickets(dataArr);
         
         
         
-      });
-    }
+  //     });
+  //   }
     
-    setTimeout(function () {
+  //   setTimeout(function () {
       
-      performanceInUserState();
-    }, 4100);
+  //     performanceInUserState();
+  //   }, 2000);
   
   
   

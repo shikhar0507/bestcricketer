@@ -244,7 +244,7 @@ app.controller('home', function ($scope, $location, $http, helper, service, char
       homePerformance(winLossHome,winLossAway);
       // awayPerformance(winLossAway);
 
-    }, 2000);
+    }, 2200);
   }
   
   initSelfish(scoreInAway, scoreInHome);

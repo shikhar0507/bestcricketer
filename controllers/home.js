@@ -323,6 +323,7 @@ app.controller('home', function ($scope, $location, $http, helper, service, char
   function performanceInUserState(v) {
       var dataArr = [];
       $http.get("https://ipinfo.io/json").then(function success(res) {
+        setTimeout(function () {
         console.log(res)
       
           for (let index = 0; index < scoreInGround(scoreInHome).length; index++) {
@@ -334,19 +335,18 @@ app.controller('home', function ($scope, $location, $http, helper, service, char
       }
 
       vm.userStateRuns = helper.score(dataArr, 0).totalRuns();
-
-     vm.userStateAverage =  vm.userStateRuns / dataArr.length;
+      
+      vm.userStateAverage =  vm.userStateRuns / dataArr.length;
       vm.userStateWickets = helper.wickets(dataArr);
-
-     
-
+      
+      
+      
     });
+  }, 2000);
   }
 
-  setTimeout(function () {
 
     performanceInUserState();
-  }, 2000);
 
 
 

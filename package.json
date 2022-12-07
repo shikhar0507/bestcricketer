@@ -12,7 +12,7 @@
     "angular": "^1.5.6",
     "csvtojson": "^1.1.9",
     "d3": "^4.13.0",
-    "express": "^4.16.2"
+    "express": "^4.17.3"
   },
   "devDependencies": {},
   "description": "Social Cops assignment to deduce whether sachin is the greatest player of all time or not",
